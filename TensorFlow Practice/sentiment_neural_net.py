@@ -81,7 +81,6 @@ def train_neural_network(x):
 
          for epoch in range(hm_epochs):
              epoch_loss = 0
-
              
              i=0
              while i < len(train_x):
@@ -89,6 +88,8 @@ def train_neural_network(x):
                  end = i+batch_size
                  batch_x = np.array(train_x[start:end])
                  batch_y = np.array(train_y[start:end])
+
+                 #print(batch_x.shape)
                  
                  _,c = sess.run([optimizer,cost], feed_dict={x:batch_x,y:batch_y})
                  

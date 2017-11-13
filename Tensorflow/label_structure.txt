@@ -1,0 +1,10 @@
+
+angle_displacement
+
+01_01 = 46Degrees  _ 0mm
+24_01 = 0Degrees   _ 0mm
+46_01 = -44Degrees _ 0mm
+
+01_30 = 46Degrees  _ -14.5mm
+24_30 = 0Degrees   _ -14.5mm
+46_30 = -44Degrees _ -14.5mm
