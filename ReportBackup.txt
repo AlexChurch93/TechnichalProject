@@ -1,0 +1,213 @@
+\documentclass[11pt]{article}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\newcommand{\matr}[1]{\mathbf{#1}} 
+
+\begin{document}
+\include{titlepage}
+\pagenumbering{arabic}
+
+\section{Abstract}
+\section{Introduction}
+
+This paper will look at the variation of architectures and processing techniques that can be utilised with deep learning in order to increase performance. On top of this considerations will be made for scaling of the network to smaller devices where real time inference can be made.
+
+\section{Literature Review}
+\begin{itemize}
+  
+  \item \cite{Chorley2009DevelopmentEncoding} \textbf{Development of a Tactile Sensor Based on Biologically Inspired Edge Encoding} \newline
+- Introduction of the TacTip sensor, emphasis on being similar to human touch. \newline
+- Aims to demonstrate that the Meissner’s Corpuscles together with the Dermal Papillae can detect strain due to there shape and position, by exploiting this shape through the design of the pins. \newline
+- GelForce and other optical sensors that scan a geometic pattern suffer from the Inverse Tactile Transduction problem. The patterns of sensory data obtained by the camera may be a result of a combination of patterns on the surface. The elastic material acts as a low pass filter with only relatively large scale spatial patterns and forces transmitted through. \newline
+- Emphasises how edge detection is important for human touch, however not referenced. \newline
+- Detailed design of the TacTip. \newline
+- In this paper two point discrimination is shown as 5mm apart, humans are known to have 2-3mm discrimination. \newline
+- Visibly detectable movement of markers given by a 0.5mm point at 0.03N. \newline
+- Results are promising but mostly based on images. \newline
+- Cheap design, 3d printable and mouldable hence this is scalable.
+  
+  \item \cite{InstituteofElectricalandElectronicsEngineers.2009} \textbf{Biomimetic and Biohybrid Systems}\newline
+\textbf{A SOLID Case for Active Bayesian Perception in Robot Touch} \newline
+- Uses tactile sensor with Taxels, although the concepts can be brought to TacTip and many other sensing hardware. \newline
+- Introduction of active bayesian perception, illustrated by locating the diameter and position of a rod.\newline
+- The active part requires a tap, then movement based on the most likely position after that tap in order to maximise the chance of getting the diameter of the rod. This is repeated until the probability of the most likely rod is known.\newline
+- Task is referred to as Simultaneous Object Localization and Identification (SOLID) \newline 
+- Presented in a formal notation for any 'where' and 'what' classes. \newline
+- ``active perception gives far finer perceptual acuity
+than passive perception when compared under similar conditions of uncertain
+object location and identity''\newline
+\newline
+\newline
+\textbf{TACTIP - Tactile Fingertip Device, Texture Analysis through Optical Tracking of Skin Features} \newline
+- Compares 2 different sizes of TacTip, standard 40mm and fingertip sizes 20mm. \newline
+- In a resource a different method was to use an Electret microphone integrated with the silicon in order to measure vibrations. \newline
+- Remove the gel before they test, requires a higher speed camera (1000fps) to better distinguish high frequency textures, only track a single pin.\newline
+- Tests with both a fingerprint like feature on skin and smooth surface.\newline
+- Works with wider pitch (more than 5mm spaced) textures for both although more accurate with fingerprint. For higher resolution texture sensing the fingerprint makes the device much more capable.\newline
+- Shows that this is capable of extracting clean, consistently textured surfaces but more work could be done on more realistic inconsistent textures like wood, cement, etc.
+\newline
+\newline
+\textbf{A Biomimetic Fingerprint Improves Spatial Tactile Perception} \newline
+- Investigates the use of a finger print in order to aid in spatial aspects of tactile perception. \newline
+- Concludes that the inclusion of a biomimetic fingerprint improves tactile acuity. May be useful to reference that the work I perform on the smoother tactip could be improved with fingerprint. \newline
+\newline
+\textbf{Force Sensing with a Biomimetic Fingertip} \newline
+- Maximum pressing magnitude is found as 7mm from initial contact, beyond which permanent damage is done to the sensor, with the clear silicon gel separating from the skin.
+- Shows that within a limited load range the tactile sensor can achieve force sensing. \newline
+- When compared with a beam load cell the tactip seems less noisey, particularly at low force load. \newline
+- Calibrated against the load cell to produce a function to model noise vs pin deflection within 0-450g range, could be something to recreate with DNN opposed to pin deflection. \newline
+\newline
+\textbf{Tactile Exploration by Contour Following Using a Biomimetic Fingertip} \newline
+- Compares silicon gel to have similar mechanical properties to the dermis and subcutaneous
+fat. \newline
+- Uses a biomimetic approach to perception based on Bayesian sequential analysis for optimal decision making which has been previously applied using the iCub fingertip. \newline
+- Cycle is to perform a predefined move, calculate angle and displacement based on current position, repeat small adjustments (or repeat taps?) until confidence of the estimated angle and displacement is higher than some threshold, then to perform another predefined move (around contour) and repeat the process until complete. \newline
+- Only performs detection of a circular shape, needs more work on multiple shapes, particularly those shown in the iCub paper. 
+\newline
+\newline
+\textbf{Discrimination-Based Perception for Robot Touch} \newline
+- When stimuli vary continuously over just one property (e.g. sharpness, size, curvature, angle) sensors can be trained over a single example and then applied to different stimuli where the results are compared to the trained exemplar. This can greatly reduce the amount of training that a sensor will be exposed to. Biomimetic in that humans or animals likely learn in a similar manner.  \newline
+- 11 triangular stimulus ranging from 35 to 85 degrees in 5 degree increments. Singular tap of 5mm depth to collect data. Not sure if orientation is ever changed.\newline
+- Results don't seem great but I dont fully understand them, need to ask Nathan. 
+\newline
+\newline
+\textbf{Exploiting Symmetry to Generalize Biomimetic Touch} \newline
+- Uses round and flat TacTip models. \newline
+- Explores the use of symmetry in these sensors in order to generalise tasks and reduce the amount of training. \newline
+- Proposes that a mixture of real collected data can be used amongst other synthetic data made via exploiting the symmetry of the sensors. Could be very useful for increasing the sample data size as Deep learning requires large amounts of data. \newline
+- Specifics on orientation of the general TacTip design, taking samples of an edge stimuli at 5 degree intervals of orientation and shifting the data 6 times to obtain the full 360 degree range of orientations. \newline
+- Similarly using the flat TacThumb and rolling this over a cylinder in 0.5mm steps, then applying translation to the data to obtain the full range. \newline
+- Results look good particularly in the orientation of the TacTip section, close to actual data. \newline
+
+
+  \item \cite{Lepora2015} \textbf{Superresolution with an optical tactile sensor} \newline
+- Task is to localise on a 40mm cylinder, uses active Bayesian perception to do so \cite{InstituteofElectricalandElectronicsEngineers.2009}. \newline
+- ``superresolution to 0.1mm accuracy compared with a 4mm resolution between tactile elements.'' \newline
+- ``Standard geometrical SR techniques from image processing do not apply well to tactile robotics''. \newline
+- Active perception is required to make this 40 fold superresolution robust. With passive touch the possible initialisation could be one that has poor acuity e.g. one near the extremities of the cylinder.\newline
+-  Reference to other papers ``For example, the best superresolution with the human eye is also about two orders of magnitude (about 0.0002 degree acuity over 0.0167 degree resolving power for 20/20 vision) [22], and typically about an order of magnitude with the human fingertip [23].'' \newline
+
+  
+  
+  \item \cite{Lepora2017ExploratoryTouch} \textbf{Exploratory Tactile ServoingWith Active Touch} \newline
+- Active task of exploring an unknown shape via following its edge. \newline
+- Matlab program that communicates via tcp/ip port to both control the robotic arm and perceive the tactip data. \newline
+- Results show that this works well on a variety of shapes, Conrads shows improvements on these same results. \newline
+- The perfomance was shown to be sensitive to the gains or radial displacement and theta, these control the proportion to move from the estimated position to a fixation point. Conrad shown deep learning was not sensitive to these gain values. \newline
+  
+  
+  \item \cite{Pinto2016TheInteractions} \textbf{The Curious Robot: Learning Visual Representations via Physical Interactions} \newline
+- Argue that humans do not learn based only on passive sensing e.g. children will pick up objects, throw them, look at them in different orientations, etc in order to learn what objects are. \newline
+- End goal is to improve on current classification of object techniques such as networks trained on imageNet, does this succesfully on a subset of objects.\newline
+- Tries to Grasp, Push, visually observe from different angles and gain tactile feedback from tactile sensors (pressure sensitive tiles). \newline
+- Tactile data only really determines hardness and is probably subject to the object geometry and sensor movement being known as shown in \cite{Yuan2017Shape-independentSensor}
+- Combines all of this data into a shared convolutional architecture, the root network designed from AlexNet with all other data from grasps, push, touch being fed through at different points.\newline
+- Analyse the convolutional layers by finding the images that maximally activate different neurons, they show a specific case of a certain convolution detecting spherical shapes in objects.\newline
+  
+  
+  \item \cite{Schmitz2014TactileDropout} \textbf{Tactile Object Recognition using Deep Learning and Dropout} \newline
+- ``aim for multimodal object recognition by power grasping of objects with an unknown orientation and position relation to the hand'' \newline
+- Use the Twendy-One robot that has tiled tactile sensors over the hand. \newline
+- Claim to be first to use deep learning for tactile sensing. \newline
+- References three other papers using deep learning for robotics, says this is rarely the case as of 2014 when the paper was published. \newline
+- Show a results comparison between a shallow ANN (with and without PCA) and deep learning with and without dropout. \newline
+- Has a tonne of references to previous papers that have used various methods for perfoming tasks with tactile hands. \newline
+- For each grasp 314 data points are recored, only 241 are from the distibuted tactile sensors, theoretically there is a lot more data to be found using the tactip optical based sensor. \newline 
+- Concatenate data over 4 grasps for the input, increase the training data by combining the grasps in different permutations (I think - theres a reference to read more). They conclude that this is good and helps learning even for shallow ANN. \newline
+- Improved the object recognition rate from 70\% to 88\% using deep learning as opposed to previous methods (with dropout and pretraining). \newline
+- Future work to include time series data e.g. grasping and regrasping. Could be exploited with RNN. \newline
+
+  
+  
+  \item \cite{Yuan2015MeasurementSensor} \textbf{Gelsight Shear and Slip} \newline
+- Added marker dots in the gel to improve the measurement of slip
+
+  \item \cite{Dong2017ImprovedSlip} \textbf{Gelsight geometry and slip} \newline
+- New design for robot gripper gives greatly improved geometric accuracy at compact size. \newline
+- Slip should be invariant to geometries and weight of the object, allowing robotic fingers to grasp unknown items. \newline
+- ``Since each surface normal corresponds
+to a unique color, the color image captured by the camera can
+be directly used to reconstruct the depth map of the contact
+surface by looking up a calibrated color-surface normal table.'' \newline
+- Tasks the gelsight sensor has achieved - recognize 40 classes of different surface textures -  detecting lumps in soft media \newline
+- Standardized fabrication process and made easier to implement.
+
+
+  \item \cite{Yuan2017Shape-independentSensor} \textbf{Gelsight Hardness test} \newline
+- Gelsight to detect hardness of objects with different shapes and hardness ranging from 8 to 87 in Shore 00 scale. \newline
+- Easiest to apply controlled force and measure deformation or vice versa, however, the sensor movement and object geometry must be strictly controlled.
+- Represent frames of the GelSight video using a convolutional neural network, and we use a recurrent (LSTM) neural network to model changes in the gel deformation over time. \newline
+- Each video sequence or a press into an object is split into 5 frames, starting point by finding the frame in which the mean intensity of the GelSight image (a proxy for the force of the press) exceeds a threshold.For the end point of the sequence, we choose the last frame whose intensity change is the peak of the sequence. 3 other frames are split evenly between. \newline
+- Frames are fed through convolutions then LSTM nodes (there are 5 units for each frame) then a prediction is performed on the final three nodes.\newline
+- The CNN should extract features better features. \newline
+- The LSTM should encode temporal change.\newline
+- The CNN used is VGG16, images are fed through and the ouput of fc7 (fully connected layer 7) are input to the LSTM.
+- They initialise weights with ImageNet pretraining which seems strange as there shouldn't be many similar images in Imagenet compared with images from tactile sensor but they do achieve good results (maybe helps with smaller data). \newline
+
+  \item \cite{Donahue2014Long-termDescription} \textbf{Long-term Recurrent Convolutional Networks} \newline
+- More detail on the convolutional and LSTM neural network design used in \cite{Yuan2017Shape-independentSensor}.
+
+\end{itemize}
+\newpage
+
+\section{Plan}
+\subsection{Baseline Performance}
+Analysing the efficacy of deep learning on a particular, already completed task. Recreating Conrads work, perhaps with closer to raw data in order to gain a baseline performance that we can increase upon in the upcoming sections.
+
+Trial and error found that a working classification for this task was AlexNet...
+
+\subsection{Preprocessing the data}
+Data preprocessing is ideally kept to a minimum to ensure that the network has the best chance to learn the relevant features for accurate and robust classification. For example the image data could be simplified by applying a threshold to create a binary, black and white image. This however increases the sensitivity to background light and brightness, potentially causing complete failure when background brightness exceeds a threshold value. As image processing is a relatively well established area there are solutions to this specific problem and other similar problems that could arise with preprocessing. However this preprocessing should be limited and thoroughly tested to ensure that it provides significant improvement over previous models. In other words, if a preprocessing step is applied to an image, increasing the complexity of the system, it should be thoroughly investigated to ensure that it is robust to all foreseeable environments as well as offering a significant performance boost in order to be deemed worthwhile. There are several image processing steps examined: 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{raw_camera_image.png}
+\caption{\label{fig:RawImage} Raw image from the camera. }
+\end{figure}
+
+\begin{itemize}
+\item \textbf{Cropping} - By reducing the amount of pixels in an image to classify, the size of the network can be reduced resulting in improved memory and speed performance. This is provided that useful points of classification are not removed. Due to the position of the camera the raw data provided contains a small unnecessary boundary. This can be reduced to improve the performance of learning in terms of speed, memory and possibly ability to learn.
+
+\item \textbf{Resizing} - Image size corresponds to network size, meaning the larger the image the larger network. Along with increased network size comes increase memory requirements and reduced learning speed. These are all adversarial effects that will be reduced along with image size. In this specific case the correct classification corresponds with slight movement of pins which in turn corresponds with individual pixel values changing. Raw images captured are of resolution $320 \times 240$ and are grey scale meaning they have only 1 channel. This is relatively small for image data but the necessary information for classification could be retained with even smaller image size. Experimentation could be performed to view how classification accuracy varies with reduced image size.
+
+\item \textbf{Masking} - Masking can be utilised to remove or reduce features of the raw images that inhibit learning. In this case there is a circular region that cannot be removed with cropping alone. As this feature is universal across all tap images it does not hold any useful information for learning. Masking this region by setting all pixel values to zero could possibly improve learning by allowing the network to focus on the varying pixels corresponding to the central pins. More likely is that this masking alone will have little to no effect on the ability for the network to learn as weights will be adjusted according to the pixel values whether they are set to a specific value or left as raw. This could potentially be improved with the application of a threshold giving a binary image. If done correctly this could create an image containing only black and white pixels in which only the pins make up the white pixels. In addition to this masking could allow for rotation to be utilised as a method to generalise collected data, given a symmetric tactile sensor. One care to be taken with applying a mask is that each camera could vary slightly in its position, masks should therefore ideally be calibrated to individual devices.
+
+\item \textbf{Thresholding} - This is the process of converting images to binary, black or white pixels. This has potential to focus the learning of the network to only the pin pixels. This will be performed simply by setting all pixel values above a threshold to a maximum value and all pixels below to zero. As this is a grey scale image there is only one channel to threshold. The intensities of pixels in the raw image will vary dependent on background light, meaning that a simple fixed value threshold will likely not be robust. A histogram searching algorithm for finding a threshold value can be performed instead which should be more robust to lighting changes.
+
+\item \textbf{Normalisation/Standardisation} - With image data, including this data set, pixel values tend to lie in the $[0,255]$ range. If these values are directly fed as an input of a neural network problems can occur such as numerical overflow where a number of specified bits is not enough to accurately represent a value. This occurs due to input pixel values being multiplied by weights and then summed which can lead to extremely large values. These values have to be stored on a computer typically as a floating point number. For example a 32bit floating point value has a range of up to $\pm 3.4 \times 10^{38}$, if this range is exceeded then incorrect results will be calculated and useful optimisation of the weights will not occur causing learning to suffer. Whilst larger that 32bit floating point storage is available this can greatly increase the size of the network. On top of this research is currently being done in the use of low and mixed precision formats (16 bit floating point) in neural networks, with results suggesting increased performance due to noise in the energy landscape. Similarly large values can inhibit learning due to diminishing gradients, dependent on the choice of activation function. If inputs are left high and a saturating activation function such as $sigmoid$ or $tanh$ is used then gradients used for adjusting weights will be to small for meaningful corrections. This will result in weights never being correctly adjusted to small enough values needed to counteract the large input values.
+
+All of this can be counteracted by normalising images before being input into the network. Images are zero centred by subtracting the mean and then limited to unit variance by dividing by a standard deviation using the formula 
+
+\begin{equation}
+	I_{ij} = \frac{I_{ij} - \mu}{\sigma}
+\end{equation}
+
+where $I_{ij}$ is the intensity of the pixel on the $i$th row and $j$th column. Typically the mean and standard deviation are calculated over the entire training dataset $\mathcal{D}$ where $\mu = \mu_{\mathcal{D}}$ and $\sigma = \sigma_{\mathcal{D}}$. A separate method could be to standardise on a per image basis however as images in this dataset are so similar results will likely be indifferent.
+
+\item \textbf{PCA Whitening} -
+\end{itemize}
+
+
+\subsection{Augmenting/Generalising the Data}
+One of the problems with the application of deep learning in a variety of cases is the lack of training data. As Deep Neural Networks will usually contain a high number of parameters they will require a large number of training points in order to tune these parameters correctly for classification. Tactile touch data is collected through the movement of a robotic arm onto known objects, this can be a relatively slow process. In this case around 15000 data samples can be collected in one day. A method to get around this is through augmentation of the data. This is effectively creating synthetic, labelled examples by applying some image processing techniques to create slight variances in your data. Common examples are cropping, translations, flipping and rotations. It is however not a simple case of picking a method and implementing it, care should be taken to ensure that labels are not effected by the process and that the created data sample is one that will likely be encountered in practical use. For example if a classification task is to read numeric digits from images it is not a good idea to add vertical or horizontal flips. This could result in the digits representing 6 and 9 being inseparable. 
+
+Slight zoom and translation can be applied to each image. These will both account for small differences in the camera position and potentially some small defects in the camera lenses. In addition to this slight noise can be added to account for more lens defects. These are all possible scenarios that a TacTip could face and the deep learning methods should therefore be robust against. Another method of generalisation is through rotation. As the design of the TacTip is controlled it is possible to exploit a symmetric pin layout in order for new data points can be synthesised through rotation \cite{InstituteofElectricalandElectronicsEngineers.2009}. One potential issue with this method is that the infrared LED's used in the TacTip design will create noticeable differences to rotated images. Thresholding and Masking could be used to remove these regions.
+
+\subsection{Varying the Architecture of the network}
+All previous classification was performed using a convolutional Neural Network, namely AlexNet. This section will analyse different types of convolutional neural network and may apply different types e.g. recurrent, fully connected and maybe Recurrent-Convolutional together.
+
+This also includes varying the way in which data is input into the network e.g. as a single image, as a video sequence, as selected images from a video sequence (selected in different ways) and as video/image sequence with a second channel for optical flow to ideally capture temporal change.
+
+
+\subsection{Application to another Classification Task}
+The previous section highlighted several methods of tackling a specific classification problem using the TacTip sensor. This section will push forward onto a separate and very different classification task, the same methods will be analysed to see if they are consistent across different problems and new methods will be introduced to try and better the results. If any new methods do provide better classification they will also be examined on the previous task.
+
+\newpage
+%\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{Mendeley}
+
+\end{document}

@@ -1,0 +1,87 @@
+\documentclass[10pt]{article}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[top=25mm, bottom=25mm, left=25mm, right=25mm]{geometry}
+\newcommand{\matr}[1]{\mathbf{#1}} 
+
+\begin{document}
+\pagenumbering{arabic}
+
+\subsection*{Problem Description}
+Humans and animals interact with the world through a variety of different senses, these senses are often adapted for there use in robotics. The field of robotics has seen substantial and ongoing research into the areas of computer vision and audio sensing, achieving superhuman accuracy in many proposed tasks. Robotic touch on the other hand is an area largely unexplored with the introduction of spatially resolved, non-binary sensors being relatively recent. Touch is however one of the key senses humans use, aiding us in the manipulation and exploration of objects as well as with direct response to physical stimuli. 
+\newline
+\newline
+A variety of different types of robotic touch sensors exist. Touch discriminative tactile sensors measure whether or not contact has been made, the output of which lacks the information needed for a large amount of tactile applications. Other simple analogue sensors measure an application of force and vary the output accordingly. These include force-sensitive resistors (FSR's), Strain Gauges, Load Cell's and pressure transducers. Alone, these do not offer any positional information for where the force is applied. The solution is to tile these sensors accross a surface as done with the TakkTile and BioTac sensors. Another method of achieving both force varying output and positional recognition of force is through retrographic sensors. This technique is used in the GelForce, Gelsight and TacTip sensors. These sensors often optically track the movement of markers, with the movement usually restrained/filtered through a silicon gel. The Gelsight sensor optically tracks the position of its surface skin through the use of reflected colored light however markers were later added to the gel in improve the measurement capabilities. These markers move according to both how much pressure is applied as well where that pressure was applied. The gel however exhibits non linear behavior that is difficult to find analytically as it also varies with the shape of the object applying force. This is therefore a task that lends itself to machine learning techniques, as seen in a variety of previous papers.
+\newline 
+\newline
+The field of computer vision has seen recent jumps in progress through the maturing of deep learning. Whilst deep learning concepts were introduced in 1943 it has taken vast improvements in hardware and application driven insights to bring the field to its current standard. In 2012 AlexNet, a convolutional neural network (CNN), impacted the field of computer vision by significantly beating the state of the art competitors in the task of sorting 1.2 million images into 1000 different classes. Recurrent neural networks (RNN's) have similarly made impacts on many fields including audio sensing through speech recognition. RNN's excel at learning from data with a temporal element, which is relevant in many applications. Robotic touch has seen some applications of deep learning with promising results. These have however only been applied recently and DL is therefore still a likely underutilised technique in this field.
+\newline 
+\newline
+This project will leverage some of the recent advancements in deep learning to achieve state of the art results in its application to a variety of robotic touch tasks. Experimentation of deep learning architecture, image pre-processing techniques and variations in how the data is represented will be performed and the impact on performance will be measured. On top of accuracy in a variety of different tasks, performance will be measured by memory and and time requirements, as these are often a limiting factors when using deep neural networks for inference. The overall aim of this project is to produce several deep learning architectures that excel in different types of application, with the advantages and disadvantages of each known.
+\newline 
+\newline
+\newpage
+
+
+\subsection*{Literature Review}
+
+\newpage
+
+\subsection*{Plan}
+
+\begin{table}[H]
+\centering
+\label{Plan Table}
+\begin{tabular}{|l|l|l|l|l|}
+\cline{1-2}
+\multicolumn{1}{|p{5cm}|}{\textbf{Task}} & \multicolumn{1}{|p{11cm}|}{\textbf{Subtasks}}  \\  \cline{1-2}
+\multicolumn{1}{|p{5cm}|}{Create a Deep Neural Net that excels at a given, already achieved, task and compare between the previous method and this.} & \multicolumn{1}{|p{9cm}|}{
+- Choose a task. (has been chosen as edge detection) \newline
+- Build a method for converting the data from labeled videos as collected into input data for a neural network. \newline
+- Build the network and make sure it's runnable on blue crystal. \newline
+- Get good results 
+}\\ \cline{1-2}
+\multicolumn{1}{|p{5cm}|}{Apply image preprocessing to the input data and analyse the effects on performance} & \multicolumn{1}{|p{11cm}|}{
+- Use one or a combination of the following; Resizing, Cropping, Masking, Thresholding, Standardizing, PCA whitening. \newline
+-  Analyse the effect on accuracy, also make considerations for the memory and time requirements for both training the network and using it for inference. Emphasis will be on accuracy, scalability will be later examined.\newline
+- Vary the types of data augmentation used (translation and zoom will be applied in the first section) add new effects to attempt to make the network robust to other situations such as lighting changes. Collect data with the symmetric tip so that rotation can be used to generalise data.\newline
+- Ideally improve results until it produces state of the art.
+}\\ \cline{1-2}
+\multicolumn{1}{|p{5cm}|}{Vary the architecture of the network and analyse the effect of this on performance} & \multicolumn{1}{|p{11cm}|}{
+- A convolutional network is used in the first section, the first part will be to vary this architecture, more layers, larger/smaller kernel sizes, fully connected layer changes. \newline
+- Feeding the data through plain fully connected networks and recurrent neural networks to see performance effects, most likely lower.\newline
+- Use this to explain why data is suited towards CNN's
+}\\ \cline{1-2}
+\multicolumn{1}{|p{5cm}|}{Introduce a new problem and apply everything learned in the previous sections.} & \multicolumn{1}{|p{11cm}|}{
+- This problem will be chosen to show that the previous architecture (CNN's) wont translate well to this new task. \newline
+- This task will likely be hardness level testing, a task that requires the change in images as a TacTip is pressed into a material. Have to actually make the matierials and set up the experiment for this.\newline
+- Show that standard convolutional neural networks do not capture this temporal information very well.\newline
+- Use this reasoning to introduce two new methods, long term recurrent convolutional neural networks and using optical flow as an input dimension. \newline
+- Get good results and compare. 
+}\\ \cline{1-2}
+\multicolumn{1}{|p{5cm}|}{Apply the best techniques and from the previous sections to a host of known problems and perhaps some new.} & \multicolumn{1}{|p{11cm}|}{
+- Ideally most of these new challenges will be solved by one of the previous methods with a high accuracy. \newline
+- Will hopefully close on a fairly general method of caputuring data from a TacTip (should also translate fairly well to other retrographic sensors), processing that data and pushing through given DL architectures that should produce good results. 
+}\\ \cline{1-2}
+\multicolumn{1}{|p{5cm}|}{Ambitious aims} & \multicolumn{1}{|p{11cm}|}{
+- Move from the single image TacTip sensor to a robotic hand.\newline
+- Data would have to be stitched together from all different camera sensors.\newline
+- Current thought would be to provide descriptive words about an object based on grasping information. e.g. spiky, soft, hard, bumpy, smooth in a manner similar to how blindfolded humans would describe objects.\newline
+- Very ambitious would be to feed this descriptive information into a 21 questions type of logic program that deduces object from these descriptions. 
+}\\ \cline{1-2}
+
+
+\end{tabular}
+\end{table}
+
+\subsection*{Progress}
+\subsubsection*{Introduction to the TacTip}
+\subsubsection*{Introduction to the task chosen}
+\subsubsection*{Deep Leaning Methods chose}
+\subsubsection*{Results}
+
+
+
+\end{document}
